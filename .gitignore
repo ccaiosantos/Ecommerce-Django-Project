@@ -1,0 +1,70 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite
+db.sqlite3
+db.sqlite3-journal
+
+# Arquivos de ambiente
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Media/uploads
+media/
+
+# Arquivos estáticos coletados
+staticfiles/
+
+# Migrações compiladas
+**/migrations/*.pyc
+
+# Build
+dist/
+build/
+
+# Coverage
+.coverage
+htmlcov/
+
+# pytest
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+
+# Cache do Django
+*.cache
+
+# Node
+node_modules/
+
+# Arquivos locais
+local_settings.py
+
+# Arquivos de backup
+*.bak
+*.swp
