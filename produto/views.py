@@ -113,14 +113,76 @@ class AdicionarAoCarrinho(View):
 
 class RemoverDoCarrinho(View):
     def get(self, *args, **kwargs):
-        return HttpResponse('Remover carrinho')
 
+        http_referer = self.request.META.get(
+            'HTTP_REFERER',
+            reverse('produto:carrinho')
+        )
 
+        variacao_id = self.request.GET.get('vid')
+
+        if not variacao_id:
+            return redirect(http_referer)
+
+        carrinho = self.request.session.get('carrinho')
+
+        if not carrinho:
+            return redirect(http_referer)
+
+        if variacao_id not in carrinho:
+            return redirect(http_referer)
+
+        item = carrinho[variacao_id]
+
+        item['quantidade'] -= 1
+
+        # Remove totalmente se chegar em 0
+        if item['quantidade'] < 1:
+
+            produto_nome = item['produto_nome']
+
+            del carrinho[variacao_id]
+
+            messages.success(
+                self.request,
+                f'Produto "{produto_nome}" removido do carrinho.'
+            )
+
+        else:
+
+            preco_unitario = item['preco_unitario']
+            preco_unitario_promocional = item['preco_unitario_promocional']
+
+            item['preco_quantitativo'] = (
+                preco_unitario * item['quantidade']
+            )
+
+            item['preco_quantitativo_promocional'] = (
+                preco_unitario_promocional * item['quantidade']
+            )
+
+            messages.success(
+                self.request,
+                'Quantidade do produto atualizada.'
+            )
+
+        self.request.session.save()
+
+        return redirect(http_referer)
 class Carrinho(View):
     def get(self, *args, **kwargs):
-        return HttpResponse('Carrinho')
+
+            contexto = {
+                'carrinho': self.request.session.get('carrinho', {})
+            }
+
+            return render(
+                self.request,
+                'produto/carrinho.html',
+                contexto
+            )
 
 
-class Finalizar(View):
+class ResumoDaCompra(View):
     def get(self, *args, **kwargs):
         return HttpResponse('Finalizar')
