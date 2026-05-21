@@ -1,28 +1,36 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Pedido(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     total = models.FloatField()
+    qtd_total = models.PositiveIntegerField(default=0)
     status = models.CharField(
-        default="C",
+        default='C',
         max_length=1,
         choices=(
-            ('A','Aprovado'),
-            ('C','Criado'),
-            ('R','Reprovado'),
-            ('P','Pendente'),
-            ('E','Enviado'),
-            ('F','Finalizado'),
+            ('A', 'Aprovado'),
+            ('C', 'Criado'),
+            ('R', 'Reprovado'),
+            ('P', 'Pendente'),
+            ('E', 'Enviado'),
+            ('F', 'Finalizado'),
         )
     )
+    data = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Pedido'
+        verbose_name_plural = 'Pedidos'
+        ordering = ['-id']
 
     def __str__(self):
         return f'Pedido N. {self.pk}'
 
-# Create your models here.
+
 class ItemPedido(models.Model):
-    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='itens')
     produto = models.CharField(max_length=255)
     produto_id = models.PositiveIntegerField()
     variacao = models.CharField(max_length=255)
@@ -30,10 +38,11 @@ class ItemPedido(models.Model):
     preco = models.FloatField()
     preco_promocional = models.FloatField(default=0)
     quantidade = models.PositiveIntegerField()
-    imagem = models.CharField(max_length=3000)
-    def __str__(self):
-        return f'Item do {self.pedido}'
-    
+    imagem = models.CharField(max_length=2000)
+
     class Meta:
         verbose_name = 'Item Pedido'
         verbose_name_plural = 'Itens do Pedido'
+
+    def __str__(self):
+        return f'Item do {self.pedido}'

@@ -1,0 +1,45 @@
+{% load static %}
+{% load omfilters %}
+
+<div class="table-responsive">
+    <table class="table table-dark table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Variação</th>
+                <th>Qtd.</th>
+                <th>Preço Unit.</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in pedido.itens.all %}
+            <tr>
+                <td>{{ item.produto }}</td>
+                <td>{{ item.variacao }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>
+                    {% if item.preco_promocional %}
+                        {{ item.preco_promocional|formata_preco }}
+                    {% else %}
+                        {{ item.preco|formata_preco }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.preco_promocional %}
+                        {{ item.preco_promocional|formata_preco }}
+                    {% else %}
+                        {{ item.preco|formata_preco }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right font-weight-bold">Total do pedido</td>
+                <td class="font-weight-bold text-warning">{{ pedido.total|formata_preco }}</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

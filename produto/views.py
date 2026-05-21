@@ -6,6 +6,39 @@ from django.views import View
 from django.http import HttpResponse
 from . import models
 
+from perfil.models import Perfil   
+from django.db.models import Q
+
+
+
+
+class ListaProdutos(ListView):
+    model = models.Produto
+    template_name = 'produto/lista.html'
+    context_object_name = 'produtos'
+    paginate_by = 10
+    ordering = ['-id']
+
+
+
+class Busca(ListaProdutos):
+    def get_queryset(self, *args, **kwargs):
+        termo = self.request.GET.get('termo') or self.request.session['termo']
+        qs = super().get_queryset(*args, **kwargs)
+
+        if not termo:
+            return qs
+
+        self.request.session['termo'] = termo
+
+        qs = qs.filter(
+            Q(nome__icontains=termo) |
+            Q(descricao_curta__icontains=termo) |
+            Q(descricao_longa__icontains=termo)
+        )
+
+        self.request.session.save()
+        return qs
 
 class ListaProdutos(ListView):
     model = models.Produto
@@ -185,4 +218,28 @@ class Carrinho(View):
 
 class ResumoDaCompra(View):
     def get(self, *args, **kwargs):
-        return HttpResponse('Finalizar')
+        if not self.request.user.is_authenticated:
+            return redirect('perfil:criar')
+
+        perfil = Perfil.objects.filter(usuario=self.request.user).exists()
+
+        if not perfil:
+            messages.error(
+                self.request,
+                'Usuário sem perfil.'
+            )
+            return redirect('perfil:criar')
+
+        if not self.request.session.get('carrinho'):
+            messages.error(
+                self.request,
+                'Carrinho vazio.'
+            )
+            return redirect('produto:lista')
+
+        contexto = {
+            'usuario': self.request.user,
+            'carrinho': self.request.session['carrinho'],
+        }
+
+        return render(self.request, 'produto/resumodacompra.html', contexto)

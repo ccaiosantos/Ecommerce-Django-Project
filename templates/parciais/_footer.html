@@ -1,24 +1,16 @@
 {% load static %}
-
-<footer class="container-fluid bg-primary">
-    <div class="container text-light">
-        <div class="row">
-            <div class="col">
-                <div class="p-1">
-                    <span class="align-middle p-1">Feito com Django</span>
-                </div>
+<footer class="mt-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 text-center text-md-left mb-3 mb-md-0">
+                <img src="{% static 'custom/img/katchau_logo.png' %}" alt="Katchau" style="height: 32px; opacity: 0.7;">
             </div>
-            <div class="col">
-                <div class="p-1 text-right">
-                    <span class="align-middle p-1">Por Caio e Pedro</span>
-                </div>
+            <div class="col-md-4 text-center mb-3 mb-md-0">
+                <small>&copy; {% now "Y" %} Katchau. Todos os direitos reservados.</small>
+            </div>
+            <div class="col-md-4 text-center text-md-right">
+                <small class="text-muted">Loja Gamer &amp; Tech</small>
             </div>
         </div>
     </div>
 </footer>
-
-<script src="{% static 'assets/bootstrap/js/jquery-3.2.1.slim.min.js'%}"></script>
-<script src="{% static 'assets/bootstrap/js/popper.min.js'%}"></script>
-<script src="{% static 'assets/bootstrap/js/bootstrap.min.js'%}"></script>
-<script defer src="{% static 'assets/font-awesome/js/all.js'%}"></script>
-<script src="{% static 'assets/custom/js/scripts.js'%}"></script>
