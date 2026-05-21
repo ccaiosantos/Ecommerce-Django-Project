@@ -1,4 +1,4 @@
-# 🛒 Ecommerce Django Project
+# 🛒 Katchau- Projeto Ecommerce Django
 
 Um e-commerce moderno inspirado em grandes marketplaces de tecnologia como a [KaBuM!](https://www.kabum.com.br?utm_source=chatgpt.com) e [TerabyteShop](https://www.terabyteshop.com.br?utm_source=chatgpt.com), desenvolvido com Django utilizando foco em performance, experiência do usuário e arquitetura escalável.
 
